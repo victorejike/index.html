@@ -1,158 +1,559 @@
-Book Flip Login & Registration Page
-A modern, interactive login and registration page with a unique book flip animation and dark mode functionality.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Flip Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-https://img.shields.io/badge/Book%2520Flip-Login%2520Page-blue
-https://img.shields.io/badge/Design-Responsive-green
-https://img.shields.io/badge/Feature-Dark%2520Mode-orange
+        :root {
+            --primary: #8a2be2;
+            --secondary: #00bfff;
+            --bg-dark: #121212;
+            --card-dark: #1e1e1e;
+            --text-dark: #f0f0f0;
+            --text-light: #333;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-🌟 Features
-Book Flip Animation: Smooth 3D page flip transition between login and registration forms
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: var(--transition);
+        }
 
-Dark Mode Toggle: Switch between light and dark themes with a single click
+        body.dark-mode {
+            --primary: #6a0dad;
+            --secondary: #1e90ff;
+            --bg-dark: #0a0a0a;
+            --card-dark: #2d2d2d;
+            --text-dark: #e0e0e0;
+            --text-light: #f0f0f0;
+        }
 
-Responsive Design: Works perfectly on desktop, tablet, and mobile devices
+        .container {
+            width: 100%;
+            max-width: 900px;
+            perspective: 1500px;
+        }
 
-Form Validation: Real-time validation with user-friendly error messages
+        .book {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            transform-style: preserve-3d;
+            transition: transform 1s ease-in-out;
+        }
 
-Social Login Options: Google, Facebook, and Twitter login buttons
+        .book-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: white;
+            transition: var(--transition);
+        }
 
-Modern UI: Gradient backgrounds, smooth animations, and interactive elements
+        .book-page.front {
+            z-index: 2;
+        }
 
-Accessibility: Proper form labels and focus states
+        .book-page.back {
+            transform: rotateY(180deg);
+            background: white;
+        }
 
-🚀 Live Demo
-You can view the live demo by opening the index.html file in your web browser or click here for online demo.
+        .book.flipped {
+            transform: rotateY(-180deg);
+        }
 
-📁 Project Structure
-text
-book-flip-login/
-│
-├── index.html          # Main HTML file with embedded CSS and JavaScript
-├── README.md           # Project documentation (this file)
-└── assets/             # Optional: For external resources
-    ├── images/
-    └── fonts/
-🛠️ Technologies Used
-HTML5: Semantic structure and forms
+        .form-container {
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+            transition: var(--transition);
+        }
 
-CSS3:
+        body.dark-mode .form-container {
+            background: var(--card-dark);
+            color: var(--text-dark);
+        }
 
-CSS Variables for theming
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
 
-3D Transforms for book flip animation
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
 
-Flexbox for layout
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
 
-Gradient backgrounds and shadows
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
 
-JavaScript:
+        body.dark-mode label {
+            color: var(--text-dark);
+        }
 
-Form handling and validation
+        input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: #f9f9f9;
+        }
 
-Dark mode toggle functionality
+        body.dark-mode input {
+            background: #2d2d2d;
+            border-color: #444;
+            color: var(--text-dark);
+        }
 
-Animation triggers
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
 
-Font Awesome: Icons for UI elements
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            color: #777;
+            transition: var(--transition);
+        }
 
-📱 Browser Compatibility
-Chrome 60+
+        body.dark-mode .input-icon {
+            color: #aaa;
+        }
 
-Firefox 55+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
 
-Safari 12+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+        }
 
-Edge 79+
+        .toggle-text {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
 
-🎨 Customization
-Colors
-The project uses CSS custom properties for easy theming. Modify these variables in the :root selector:
+        body.dark-mode .toggle-text {
+            color: var(--text-dark);
+        }
 
-css
-:root {
-    --primary: #8a2be2;      /* Main purple color */
-    --secondary: #00bfff;    /* Main blue color */
-    --bg-dark: #121212;      /* Dark mode background */
-    --card-dark: #1e1e1e;    /* Dark mode card background */
-    --text-dark: #f0f0f0;    /* Dark mode text color */
-    --text-light: #333;      /* Light mode text color */
-}
-Animation Speed
-Adjust the transition timing by modifying:
+        .toggle-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
 
-css
---transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-📋 Installation & Usage
-Clone or Download the project files
+        .toggle-text a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
 
-Open index.html in your web browser
+        .toggle-text a:hover::after {
+            width: 100%;
+        }
 
-Interact with the login/registration forms
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: white;
+            transition: var(--transition);
+            z-index: 10;
+        }
 
-Toggle dark mode using the moon/sun button
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-Flip between forms using the "Sign Up" / "Sign In" links
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-🔧 Implementation Details
-Book Flip Animation
-The flip animation is achieved using:
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5f5f5;
+            color: #555;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
 
-CSS 3D transforms with perspective and transform-style: preserve-3d
+        body.dark-mode .social-btn {
+            background: #2d2d2d;
+            color: #aaa;
+        }
 
-backface-visibility: hidden to hide the reverse side
+        .social-btn:hover {
+            transform: translateY(-5px);
+            background: var(--primary);
+            color: white;
+        }
 
-JavaScript class toggling for animation triggers
+        .message {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            transition: var(--transition);
+        }
 
-Dark Mode Implementation
-CSS custom properties for dynamic theming
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
 
-JavaScript class toggling on body element
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
 
-Smooth transitions for all color changes
+        body.dark-mode .success {
+            background: #2d4a2d;
+            color: #8bc34a;
+            border-color: #3d5a3d;
+        }
 
-Form Validation
-Client-side validation with custom error messages
+        body.dark-mode .error {
+            background: #4a2d2d;
+            color: #e57373;
+            border-color: #5a3d3d;
+        }
 
-Password strength checking (minimum 6 characters)
+        .flip-instruction {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
 
-Password confirmation matching
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
 
-Success/error message display system
-
-📝 Code Overview
-HTML Structure
-html
-<div class="container">
-    <button class="theme-toggle">🌙</button>
-    <div class="book" id="book">
-        <div class="book-page front">Login Form</div>
-        <div class="book-page back">Registration Form</div>
+        @media (max-width: 768px) {
+            .book {
+                height: 600px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        
+        <div class="book" id="book">
+            <!-- Login Page (Front) -->
+            <div class="book-page front">
+                <div class="form-container">
+                    <h2>Welcome Back</h2>
+                    <div id="login-message" class="message"></div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </form>
+                    
+                    <div class="social-login">
+                        <div class="social-btn">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <div class="social-btn">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <div class="social-btn">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-text">
+                        Don't have an account? <a id="show-register">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Registration Page (Back) -->
+            <div class="book-page back">
+                <div class="form-container">
+                    <h2>Create Account</h2>
+                    <div id="register-message" class="message"></div>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-name">Full Name</label>
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="register-name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="register-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="register-password" placeholder="Create a password" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">Confirm Password</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Confirm your password" required>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </button>
+                    </form>
+                    
+                    <div class="toggle-text">
+                        Already have an account? <a id="show-login">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flip-instruction">
+            <i class="fas fa-sync-alt"></i> Click Sign Up to flip the page
+        </div>
     </div>
-</div>
-Key JavaScript Functions
-javascript
-// Toggle book flip animation
-book.classList.add('flipped');
 
-// Toggle dark mode
-body.classList.toggle('dark-mode');
+    <script>
+        // DOM Elements
+        const book = document.getElementById('book');
+        const showRegister = document.getElementById('show-register');
+        const showLogin = document.getElementById('show-login');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginMessage = document.getElementById('login-message');
+        const registerMessage = document.getElementById('register-message');
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
-// Show validation messages
-showMessage(element, text, type);
-🎯 Future Enhancements
-Backend integration for actual user authentication
+        // Toggle between login and register forms with book flip animation
+        showRegister.addEventListener('click', () => {
+            book.classList.add('flipped');
+        });
 
-Password strength meter
+        showLogin.addEventListener('click', () => {
+            book.classList.remove('flipped');
+        });
 
-Remember me functionality
+        // Handle login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Simple validation
+            if (!email || !password) {
+                showMessage(loginMessage, 'Please fill in all fields', 'error');
+                return;
+            }
+            
+            // In a real application, you would send this data to a server
+            // For demo purposes, we'll just show a success message
+            showMessage(loginMessage, 'Login successful! Redirecting...', 'success');
+            loginForm.reset();
+            
+            // In a real app, you would redirect to the dashboard
+            // setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+        });
 
-Forgot password flow
+        // Handle registration form submission
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                showMessage(registerMessage, 'Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage(registerMessage, 'Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage(registerMessage, 'Passwords do not match', 'error');
+                return;
+            }
+            
+            // In a real application, you would send this data to a server
+            // For demo purposes, we'll just show a success message
+            showMessage(registerMessage, 'Account created successfully!', 'success');
+            registerForm.reset();
+            
+            // Switch to login form after successful registration
+            setTimeout(() => {
+                book.classList.remove('flipped');
+                showMessage(loginMessage, 'Account created! Please log in.', 'success');
+            }, 1500);
+        });
 
-Social media authentication integration
+        // Toggle dark mode
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
 
-Multi-language support
+        // Helper function to show messages
+        function showMessage(element, text, type) {
+            element.textContent = text;
+            element.className = `message ${type}`;
+            element.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
 
-Progressive Web App (PWA) features
-
-🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+        // Add some interactive effects to inputs
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            // Add focus effect
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('.input-icon').style.color = 'var(--primary)';
+            });
+            
+            // Remove focus effect
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('.input-icon').style.color = '';
+            });
+        });
+    </script>
+</body>
+</html>
